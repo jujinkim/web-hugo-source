@@ -1,4 +1,4 @@
-baseURL = "http://jujinkim.com/"
+baseURL = "http://jujinkim.com"
 DefaultContentLanguage = "en"
 theme = "hugo-paperMod"
 hasCJKLanguage = true
