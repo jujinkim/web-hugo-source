@@ -1,4 +1,13 @@
 baseURL = "http://jujinkim.com/"
-languageCode = "en-us"
-title = "Jujin Kim"
-theme = "hugo-PaperMod"
+DefaultContentLanguage = "en"
+theme = "hugo-paperMod"
+hasCJKLanguage = true
+copyright = "Jujin Kim (Dangumju)"
+
+[languages]
+    [languages.ko]
+        title = "김주진 블로그"
+        languageName = "한국어"
+    [languages.en]
+        title = "Jujin Kim's blog"
+        languageName = "English"
