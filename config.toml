@@ -1,0 +1,4 @@
+baseURL = "http://jujinkim.com/"
+languageCode = "en-us"
+title = "Jujin Kim"
+theme = "hugo-PaperMod"

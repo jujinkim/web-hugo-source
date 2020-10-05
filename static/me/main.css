@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+html {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    font-family: 'Nanum Gothic', sans-serif;
+}
+
+body {
+    margin: auto;
+    height: 100%;
+    background: var(--bg);
+    color: var(--font-color);
+}
+
+
+a {
+    color: var(--font-color) !important;
+}
+
+/* nav */
+nav {
+    border-radius: 32px;
+    display: flex;
+    scrollbar-width: none;
+    background: var(--bg);
+    box-shadow: var(--section-shadow-dist) var(--section-shadow-dist)
+                var(--section-shadow-size) var(--bg-bottom-shadow), 
+                calc(var(--section-shadow-dist) * -1) calc(var(--section-shadow-dist) * -1)
+                var(--section-shadow-size) var(--bg-top-shadow);
+}
+nav::-webkit-scrollbar {
+    display: none;
+}
+
+nav ul {
+    list-style-type: none;
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+    width: 100%;
+    margin: 6px;
+}
+
+nav li {
+    border-radius: 24px;
+    cursor: pointer;
+    overflow: hidden;
+    background: var(--bg);
+    box-shadow: inset
+                var(--item-shadow-dist) var(--item-shadow-dist)
+                var(--item-shadow-size) var(--bg-bottom-shadow), 
+                inset 
+                calc(var(--item-shadow-dist) * -1) calc(var(--item-shadow-dist) * -1)
+                var(--item-shadow-size) var(--bg-top-shadow);
+}
+
+/* sections */
+section {
+    border-radius: 36px;
+    min-height: 100px;
+    margin: 20px;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: var(--bg);
+    border: 3px solid var(--bg);
+    box-shadow: var(--section-shadow-dist) var(--section-shadow-dist)
+                var(--section-shadow-size) var(--bg-bottom-shadow), 
+                calc(var(--section-shadow-dist) * -1) calc(var(--section-shadow-dist) * -1)
+                var(--section-shadow-size) var(--bg-top-shadow),
+                inset 
+                var(--section-inset-shadow-dist) var(--section-inset-shadow-dist)
+                var(--section-inset-shadow-size) var(--bg-bottom-shadow), 
+                inset 
+                calc(var(--section-inset-shadow-dist) * -1) calc(var(--section-inset-shadow-dist) * -1)
+                var(--section-inset-shadow-size) var(--bg-top-shadow);
+
+}
+
+section td.tb_year {
+    font-size: 0.5em;
+    opacity: 0.6;
+    border-right: 2px solid;
+    width: 70px;
+    border-color: var(--font-color);
+}
+
+section tr.tb_space {
+    height: 10px;
+}
+section td.tb_desc {
+    padding-left: 10px;
+}
+
+section .tag {
+    display: block;
+    font-size: 0.7em;
+    opacity: 0.6;
+}
+
+section hr {
+    background: var(--font-color);
+}
+
+/* Profile image */
+#img_profile {
+    width:160px; 
+    height:160px; 
+    border-radius: 84px; 
+    float: right;
+    border: 6px solid var(--bg);
+    box-shadow: var(--item-shadow-dist) var(--item-shadow-dist)
+                var(--item-shadow-size) var(--bg-bottom-shadow), 
+                calc(var(--item-shadow-dist) * -1) calc(var(--item-shadow-dist) * -1)
+                var(--item-shadow-size) var(--bg-top-shadow);
+}
+
+/* Links */
+div.divLinks img {
+    width: 24px;
+    height: 24px;
+}
+.light div.divLinks img.white,
+.dark div.divLinks img.black,
+.rosegold div.divLinks img.black
+{
+    display: none;
+}
