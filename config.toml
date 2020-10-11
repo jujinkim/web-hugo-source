@@ -21,6 +21,7 @@ copyright = "Jujin Kim (Dangumju)"
     ShowReadingTime = true
     ShowToc = true
     TocOpen = true
+    comments = true
     [homeInfoParams]
         Title = "Hi there wave"
         Content = "Can be Info, links, about..."
