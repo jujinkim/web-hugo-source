@@ -5,3 +5,6 @@
 	path = public
 	url = https://github.com/jujinkim/web-jujinkim.com.git
 	branch = master
+[submodule "themes/tale"]
+	path = themes/tale
+	url = https://github.com/EmielH/tale-hugo.git
