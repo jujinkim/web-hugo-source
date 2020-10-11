@@ -4,6 +4,27 @@ theme = "hugo-PaperMod"
 hasCJKLanguage = true
 copyright = "Jujin Kim (Dangumju)"
 
+[menu]
+    [[menu.main]]
+        identifier = "about"
+        name = "About me"
+        url = "/me"
+    [[menu.main]]
+        identifier = "posts"
+        name = "Posts"
+        url = "/post"
+
+[params]
+    defaultTheme = "auto"
+    layout = "archives"
+    ShowShareButtons = true
+    ShowReadingTime = true
+    ShowToc = true
+    TocOpen = true
+    [homeInfoParams]
+        Title = "Hi there wave"
+        Content = "Can be Info, links, about..."
+
 [languages]
     [languages.ko]
         title = "김주진 블로그"
