@@ -1,6 +1,6 @@
 baseURL = "https://jujinkim.com"
 DefaultContentLanguage = "en"
-theme = "hugo-paperMod"
+theme = "tale"
 hasCJKLanguage = true
 copyright = "Jujin Kim (Dangumju)"
 
