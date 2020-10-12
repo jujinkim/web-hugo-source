@@ -23,9 +23,9 @@ googleAnalytics = "UA-54002449-3"
     ShowToc = true
     TocOpen = true
     comments = true
-    [homeInfoParams]
-        Title = "Hi there wave"
-        Content = "Can be Info, links, about..."
+    [params.homeInfoParams]
+        Title = "Hi there"
+        Content = "Thanks for visiting my blog. Have a nice day :)"
 
 [languages]
     [languages.ko]
