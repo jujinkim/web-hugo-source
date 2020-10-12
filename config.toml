@@ -3,6 +3,7 @@ DefaultContentLanguage = "en"
 theme = "hugo-PaperMod"
 hasCJKLanguage = true
 copyright = "Jujin Kim (Dangumju)"
+googleAnalytics = "UA-54002449-3"
 
 [menu]
     [[menu.main]]
