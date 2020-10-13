@@ -1,7 +1,6 @@
 ---
 title: "Use Utterances comment service at Hugo"
 date: 2020-10-13T22:45:58+09:00
-draft: true
 ---
 
 &nbsp;Usually, some blog platforms such as WordPress and Blogger support their own comment system. However, since the comment system needs a server and DB, it is not able to be applied directly to a static web page. So we need a comment service that using an external server and script.  
