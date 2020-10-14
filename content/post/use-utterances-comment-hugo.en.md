@@ -1,5 +1,5 @@
 ---
-title: "Use Utterances comment service at Hugo"
+title: "Use Utterances comment at Hugo"
 date: 2020-10-13T22:45:58+09:00
 ---
 
@@ -14,7 +14,7 @@ There are a bunch of comment systems, We're gonna take a look the service that n
 # Why utterances?
 &nbsp;There are so many comment services for static pages. Disqus, HTML Comment Box, etc. In Korea, 'LiveRe' provides the social media comment service.
 
-&nbsp;But, Disqus is too heavy and needs a social media account. There could be also spam comments and malicious comments. LiveRe also has the disadvantages of the social media comment system. HTMLCommentBox is lightweight and doesn not require social media account, but it's difficult to manage and not free from spam as well.
+&nbsp;But, Disqus is too heavy and needs a social media account. There could be also malicious comments. LiveRe also has the disadvantages of the social media comment system. HTMLCommentBox is lightweight and doesn not require social media account, but it's difficult to manage and not free from malicious comments as well.
 &nbsp;Of course these services are not bad, but there are problems that mentioned above.
 
 &nbsp;utterances could be managed easily at GitHub issue from its repo since it is a service that uses GitHub issue. And it needs a GitHub account to leave a comment, so I think there should be fewer bad comments than other services..
@@ -24,7 +24,7 @@ There are a bunch of comment systems, We're gonna take a look the service that n
    
 ---
 # Add utterances
-&nbsp;To apply utterances is very easy. In fact, even those who don't know this can add into their website in about 10 minutes.
+&nbsp;Applying utterances to your site is very easy. In fact, even those who don't know this can add into their website in about 10 minutes.
 &nbsp;First of all, in this post, I'll explain based on Hugo. But it is able to apply to the other service such as Jekyll easily.
 
 &nbsp;There are 4 steps to apply uterances.
@@ -63,4 +63,4 @@ Install the app on the repo at https://github.com/apps/utterances.
 &nbsp;Wow, Everythings are done! Just upload the generated files into the server and you may see the comment section that using GitHub. And, just leave a test comment and check that there is a new issue at GitHub repo with the comment!
 
 ---
-If your site have articles that GitHub users will visit frequently, try applying utterances now!
+&nbsp;If your site have articles that GitHub users will visit frequently, try applying utterances now!
