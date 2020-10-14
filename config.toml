@@ -4,6 +4,7 @@ theme = "hugo-PaperMod"
 hasCJKLanguage = true
 copyright = "Jujin Kim (Dangumju)"
 googleAnalytics = "UA-54002449-3"
+enableRobotsTXT = true
 
 [menu]
     [[menu.main]]
@@ -34,3 +35,10 @@ googleAnalytics = "UA-54002449-3"
     [languages.en]
         title = "Jujin Kim's blog"
         languageName = "English"
+
+[outputs]
+    home = ["HTML", "RSS"]
+
+[sitemap]
+    changefreq = "weekly"
+    filename = "sitemap.xml"
