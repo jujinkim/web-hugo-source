@@ -11,15 +11,21 @@ enableRobotsTXT = true
     [[menu.main]]
         identifier = "about"
         name = "About me"
-        url = "/me"
+        url = "../me"
     [[menu.main]]
         identifier = "posts"
         name = "Posts"
         url = "/post"
 
-[minify]
-    disableXML = true
-    minifyOutput = true
+[languages]
+    [languages.ko]
+        title = "김주진 블로그"
+        languageName = "한국어"
+        weight = 1
+    [languages.en]
+        title = "Jujin Kim's blog"
+        languageName = "English"
+        weight = 2
 
 [params]
     env = "production"
@@ -36,14 +42,12 @@ enableRobotsTXT = true
     [params.homeInfoParams]
         Title = "Hi there"
         Content = "Thanks for visiting my blog. Have a nice day :)"
-
-[languages]
-    [languages.ko]
-        title = "김주진 블로그"
-        languageName = "한국어"
-    [languages.en]
-        title = "Jujin Kim's blog"
-        languageName = "English"
+    [params.navigation]
+        help = "Help"
+        
+[minify]
+    disableXML = true
+    minifyOutput = true
 
 [outputs]
     home = ["HTML", "RSS"]
