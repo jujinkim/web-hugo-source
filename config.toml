@@ -1,4 +1,5 @@
 baseURL = "https://jujinkim.com"
+title = "JujinKim's Blog"
 DefaultContentLanguage = "en"
 theme = "hugo-PaperMod"
 hasCJKLanguage = true
@@ -16,7 +17,15 @@ enableRobotsTXT = true
         name = "Posts"
         url = "/post"
 
+[minify]
+    disableXML = true
+    minifyOutput = true
+
 [params]
+    env = "production"
+    title = "JujinKim's Blog"
+    description = "JujinKim's engineering blog"
+    autor = "Jujin Kim"
     defaultTheme = "auto"
     layout = "archives"
     ShowShareButtons = true
