@@ -3,11 +3,11 @@ title: "DI(의존성 주입)란 무엇일까?"
 date: 2020-10-18T01:12:39+09:00
 draft: true
 ---
-&nbsp;이 글은 Dagger2를 공부하기에 앞서 DI(의존성 주입)라는게 무엇인지 도저히 모르겠는 분들을 위한 글입니다. 네, 저를 위한 글입니다.
+&nbsp;이 글은 Dagger2를 공부하기에 앞서 DI(의존성 주입)라는게 무엇인지 도저히 모르겠는 분들을 위한(나를 위한) 글입니다.
 
 ## DI란 무엇인가?
 
-&nbsp;DI는 의존성 주입(Dependency Injection)의 약자로, **어떤 객체의 의존성을 외부에서 주입시켜주는 프로그래밍 설계 기법**입니다. 무슨 말인지 모르겠다구요? 네, 저도 모르겠습니다. 뭘 주입한다는건지도 모르겠고, 알았다 하더라도 이걸 왜 써야하는지 모르겠단 말입니다. 그래서 이 글을 썼습니다. 
+&nbsp;DI는 의존성 주입(Dependency Injection)의 약자로, **어떤 객체의 의존성을 외부에서 주입시켜주는 프로그래밍 설계 기법**입니다. 무슨 말인지 모르겠다구요? 네, 저도 모르겠습니다. 뭘 주입한다는건지도 모르겠고, 알았다 하더라도 이걸 왜 써야하는지 모르겠단 말입니다. 영어로 보아도, 한국어로 보아도 모르겠습니다. 그래서 이 글을 썼습니다. 
 
 &nbsp;DI 특징을 정의하기에 앞서, 일상에서의 어떤 상황을 상상해보겠습니다.
 
@@ -105,23 +105,157 @@ class Chef(val market: Market) {
     }
 }
 ```
-&nbsp;요리사가 재료를 구해오든, 아니면 `cookRamen()`의 매개변수로 재료를 받든간에 아무튼 요리사나 사장님은 더 이상 재료를 직접 만들 필요는 없어졌습니다.
+&nbsp;요리사가 재료를 구해오든지, 아니면 `cookRamen()`에 매개변수를 추가해서 재료를 받든지 아무튼 요리사나 사장님은 더 이상 재료를 직접 만들 필요는 없어졌습니다.
 
 &nbsp;그래도 조금 어색합니다. 보통 시장은 자기가 파는 물건을 직접 만들지는 않잖아요? 납품받아서 팔지. 시장은 유통해줄 뿐, 제품을 생산하는 곳은 따로 있습니다. 그리고 자주 시장에서 물건을 사다 보면 다음부터는 일일이 항목별로 사지 않고, 아예 묶어서 구입하기도 합니다.
 
 ---
 ## DI 3단계: 재료를 만드는곳, 공급하는 곳, 사용하는 곳으로 나눈다.
-&nbsp;만드는 곳, 파는 곳, 쓰는 곳으로 역할을 나눠보겠습니다. 
+&nbsp;시장은 물건을 유통하는 곳입니다. 만드는 곳은 따로 있습니다. 그러므로 시장도 다른 곳에서 물건을 제공받도록 수정해줘야합니다. 만드는 곳, 파는 곳, 쓰는 곳으로 역할을 나눠서 코드를 다시 작성해보겠습니다. 
 
 ```kotlin
+// 각 재료를 만드는 녀석들
+class WaterMaker() {
+    fun getWater(): Water = Water()
+}
 
+class SauceMaker() {
+    fun getSauce(): Sauce = Sauce()
+}
+
+class NoodleMaker() {
+    fun getNoodle(): Noodle = Noodle()
+}
+
+class BowlMaker() {
+    fun getRamenBowl(): RamenBowl = RamenBowl()
+}
+
+// 재료를 유통하는 녀석
+class Market {
+    val waterMaker = WaterMaker()
+    val sauceMaker = SauceMaker()
+    val noodleMaker = NoodleMaker()
+    val bowlMaker = BowlMaker()
+
+    val getRamenIngredients(visitorChef: Chef) {
+        visitorChef.sauce = sauceMaker.getSauce()
+        visitorChef.noodle = noodleMaker.getNoodle()
+        visitorChef.water = waterMaker.getWater()
+        visitorChef.bowl = bowlMakger.getRamenBowl()
+    }
+}
+
+// 재료를 쓰는 녀석
+class Chef(val market: Market) {
+    lateinit var water: Water
+    lateinit var sauce: Sauce
+    lateinit var noodle: Noodle
+    lateinit var bowl: RamenBowl
+
+    init {
+        market.getRamenIngredients(this)
+    }
+
+    fun cookRamen(): Ramen {
+        val ramen = bowl.makeRamen(water, sauce, noodle)
+        return ramen
+    }
+}
 ```
 &nbsp;이제야 산업혁명 후 발전된 현대 사회의 모습이 코드에서 보이네요.
 
+- 각 재료의 생산자들이 있다.
+- 유통자 역할을 하는 시장이 있다. 시장은 재료를 생산자에게서 납품받아서 소비자에게 제공한다.
+- 고객이 단골인가보다. 일일이 재료를 구할 필요 없이 "평소 사던거요" 같은 주문을 한다.
+- 요리사는 이제 "라면을 만들라"는 지시에 정말 "라면을 조리하는" 한 가지 일만을 할 수 있다.
 
+&nbsp;산업혁명 발전 과정 중에는 "소품종 대량생산"이 있습니다. 이것은 각자 해야 할 일을 잘 분배해야합니다. 혼자 다 하려고 하면 이도저도 아닌 결과물들만 나옵니다. 그리고 우리는 위 예제의 진행을 통해 산업혁명 이후의 발전된 유통망 사회를 작게나마 구성했습니다.  
+&nbsp;하지만 위 의심도 맞습니다. 저거 만들려면 DI 코드들 다 만들어줘야하는데 귀찮긴 해요. 그래서 Dagger2같은 프레임워크를 쓰는 것입니다. 거기엔 Market같은게 다 만들어져 있거든요. Dagger2에 관해서는 다음 글에서 확인해보겠습니다.
 
+---
+## DI 4단계: 인터페이스를 통해 의존관계를 분리한다
+&nbsp;어려운게 또 나왔습니다. 관계를 분리시킨다니. 사실 3단계까지는 쉬운 이해를 위해 최대한 직관적으로 예시 코드를 작성했습니다. 3단계까지는 반쪽짜리 DI이기도 합니다. 인터페이스 없이, 생각나는 그대로 썼어요. 그러나 실제 유통망은 훨씬 복잡하다는걸 다들 아실겁니다. 그래서 제공자와 피제공자간 관계를 분리시켜야 합니다.  
+&nbsp;분리시킨다는건 말 그대로 두 클래스가 서로를 모르게 한다는 것입니다. 코드상에서 두 클래스가 서로에 대해 참조를 안한다는 뜻이기도 하지요. 이게 왜 나왔냐하면, 사실 3번까지의 과정은 의존성을 주입시키기는 하지만, 주입되는 클래스가 주입하는 클래스를 너무 잘 알고있습니다. 소비자가 시장이 제공하는 모든 것을 알지는 않잖아요. 시장이 소비자에게 제공하는 서비스만 소비자는 알고있습니다.
 
+&nbsp;프로젝트가 커지고 다양한 클래스들이 필요해질 경우 다형성도 필요하게됩니다. DI의 구현도 예외는 아닙니다. 객체를 제공하는 클래스도 세 개 보다는 많을 것이고, 객체를 유통하는 클래스가 `Market` 하나만 있지는 않을것입니다. 하지만 이들이 하는 행동은 비슷합니다. 제공 클래스들은 "제공"하고, 유통 클래스들은 "유통"하고, 나머지는 "사용"합니다. 이런 공통적인 행동들을 `Interface`로 묶어야합니다. 예를들어, 유통 역할을 할 클래스가 "식재료 마켓"과 "전자상가" 두 개가 있다고 하면, 두 시장은 분명히 취급하는 물건도, 방법도 다를 것입니다. 하지만 `물건을 납품받고, 소비자에게 제공(주입)한다` 는 역할(행동)은 동일하지요. 또, 제공 클래스들은 `물건을 제공한다`가 공통 행동입니다. 이런 행동들을 인터페이스로 묶는다면, 요리사는 Market 클래스가 정확히 어떻게 구현됐는지 알 필요가 없습니다. 그냥 추상화된 시장 인터페이스만 알고있고, 그 시장에 객체를 요청하기만 하면 필요한 객체를 주입받을 수 있을테니까요.
 
+```kotlin
+// 재료를 만드는 클래스들은 공통적으로 "만든다"라는 행동을 합니다.
+interface IMaker<T> {
+    fun getItem(): T
+}
 
+class WaterMaker(): IMaker<Water> {
+    fun getItem(): Water = Water()
+}
 
-&nbsp;이 글에서는 제가 나름대로 이해한 DI를 적었습니다. 많은 분들이 이 글을 보고 좋는 느낌을 얻어가셨으면 좋겠습니다. DI는 확실히 손이 많이 가는 설계이지만, 알아두면 정말 많은 부분에서 새로운 영감을 얻으실 것입니다. 혹시나 애매하거나 틀린부분이 있다면 지적해주시면 참고하겠습니다.
+class SauceMaker(): IMaker<Sauce> {
+    fun getItem(): Sauce = Sauce()
+}
+
+class NoodleMaker(): IMaker<Noodle> {
+    fun getItem(): Noodle = Noodle()
+}
+
+class BowlMaker(): IMaker<RamenBowl> {
+    fun getRamenBowl(): RamenBowl = RamenBowl()
+}
+
+// 재료를 유통하는 클래스들은 공통적으로 "유통한다"라는 행동을 합니다.
+interface IMarket {
+    val getIngredients(visitor: Any)
+}
+
+class Market: IMarket {
+    val waterMaker = WaterMaker()
+    val sauceMaker = SauceMaker()
+    val noodleMaker = NoodleMaker()
+    val bowlMaker = BowlMaker()
+
+    val getIngredients(visitor: Any) {
+        if (visitor is Chef) {
+            visitorChef.sauce = sauceMaker.getSauce()
+            visitorChef.noodle = noodleMaker.getNoodle()
+            visitorChef.water = waterMaker.getWater()
+            visitorChef.bowl = bowlMakger.getRamenBowl()
+        }
+    }
+}
+
+// 재료를 쓰는 녀석
+class Chef(val market: IMarket) {
+    lateinit var water: Water
+    lateinit var sauce: Sauce
+    lateinit var noodle: Noodle
+    lateinit var bowl: RamenBowl
+    
+    init {
+        market.getIngredients(this)
+    }
+
+    fun cookRamen(): Ramen {
+        val ramen = bowl.makeRamen(water, sauce, noodle)
+        return ramen
+    }
+}
+```
+
+&nbsp;개쩔죠. 이것이 바로 DI같은겁니다. 느끼셨겠지만 DI는 어느 한 언어만을 위한게 아닙니다. 그냥 말 그대로 코드 설계입니다. 그런데 이거 코드도 길어졌고 그냥 처음처럼 짜면 안되나 싶기도 할 수도 있어요. Market도 결국에는 우리가 직접 구현해줘야하는 것 같고말이죠.  
+&nbsp;그런데요, 만약 DI 안쓰고 버티다 프로젝트가 커졌다고 해봅시다. 그럼 아마 요리사 종류도 많아지고 재료 종류도 많아졌겠지요. 그럼 재료 하나 수정할 때마다 모든 요라사 다 수정해줘야합니다. 요리사들에게 일일이 재료 생성자 때려박고 관리하다보면 나중엔 귀찮아질거에요. 신기능 개발보다 빡센게 유지보수인건 다들 아실겁니다.
+
+---
+## IoC(제어의 역전)?
+&nbsp;아마 많은 DI 글들을 보면 꼭 빠지지 않는 개념으로 IoC(제어의 역전)이 있을 것입니다. 글 마지막 부분에 이 개념을 쓴 이유는, 어차피 아무것도 모른 상태로 "제어를 역전한다" 이런 말 써봐야 저부터가 이해가 안되기 때문입니다. 
+
+&nbsp;위 예제의 마지막에서는 이미 제어가 역전된 듯한 모습을 보여주긴 합니다. 요리사(소비자)가 직접 필요한 객체를 초기화하지 않았습니다. 그저 요리사는 마켓에 "객체를 달라"고 호출만 했고, 마켓에서 요청받은 객체를 알아서 만들어서 주입해줬죠. 즉, 요리사가 필요한 객체를 제어하는 입장에서, 제어된 객체를 받는 입장이 되어버린것이지요. 요리사는 객체가 어떻게 만들어진건지, 이 객체가 유일한지 싱글톤인지도 모릅니다. 그저 받아서 쓰기만 하면 될 뿐입니다.
+
+&nbsp;사실 제어의 역전 개념은 이런 예제정도로는 완전히 설명하기 어렵습니다. 용어부터가 복잡하잖아요. 그리고 제어의 역전은 추상화가 들어가야합니다. 하위 클래스가 스스로 사용하려는 객체를 구체적으로 몰라도 되어야하기 때문입니다.
+
+---
+## 요약
+- DI: 자기가 쓸 객체가 어떻게 만들어지는지 모르지만 일단 요청해서 받아다가 쓴다.
+- IoC: 누군가 호출할 수도 있는 코드를 작성한다. 원래라면 호출자가 제어해야 할 코드를 다른 클래스가 제어한다.
+- 왜 써?: 쓴다면 산업혁명이 당신의 코드에서 일어났다고 생각하자.
+
+&nbsp;이 글에서는 제가 나름대로 이해한 DI를 적었습니다. 많은 분들이 이 글을 보고 좋는 느낌을 얻어가셨으면 좋겠습니다. DI는 확실히 손이 많이 가는 설계이지만, 알아두면 많은 부분에서 새로운 영감을 얻으실 것입니다.
