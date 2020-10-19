@@ -40,7 +40,7 @@ Install the app on the repo at https://github.com/apps/utterances.
 
 ## Set up utterance
 &nbsp;Go to https://utteranc.es   
-&nbsp;There is a section **configuration**, Type the repo's name that is installeld utterances into here.
+&nbsp;There is a **configuration** section, type the repo's name that is installed utterances into here.
 &nbsp;**Blog post <--> Issue Mapping** is the part that how GitHub issue should be created. Usually the default setting could used, but it is better to know the other setting to use this app flexibly.
 
 - Issue title contains page pathname - issue title is a page's path. There will be same comments on the same path. This means, comments will be same even the page's pateh are same with different domains.
@@ -63,4 +63,4 @@ Install the app on the repo at https://github.com/apps/utterances.
 &nbsp;Wow, Everythings are done! Just upload the generated files into the server and you may see the comment section that using GitHub. And, just leave a test comment and check that there is a new issue at GitHub repo with the comment!
 
 ---
-&nbsp;If your site have articles that GitHub users will visit frequently, try applying utterances now!
+&nbsp;If your site have posts that frequently visited by GitHub users, try applying utterances now!
