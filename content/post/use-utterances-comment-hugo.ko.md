@@ -56,7 +56,7 @@ https://github.com/apps/utterances 에서 해당 repo에 앱 설치를 해줍니
 
 ## 코드 붙여넣기
 &nbsp;위에서 설정을 다 마치면 **Enable Utterances** 에 코드가 생성이 되어있을 것입니다. 스크립트 파일이기 때문에, 해당 코드를 그대로 덧글이 들어가야 할 곳에 붙여 넣어주면 됩니다.  
-&nbsp;Hugo의 경우 /layout/partials/comments.html 파일에(없으면 만듭니다) 넣어주면 됩니다.
+&nbsp;Hugo의 경우 테마마다 다르기 때문에 각 테마 설명서를 확인해보시길 바랍니다. (PaperMod 테마의 경우 /layout/partials/comments.html 파일에(없으면 만듭니다) 넣어주면 됩니다.)
 
 ---
 # 적용!

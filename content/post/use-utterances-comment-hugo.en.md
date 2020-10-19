@@ -56,7 +56,7 @@ Install the app on the repo at https://github.com/apps/utterances.
 
 ## Paste codes
 &nbsp;A code will be generated at **Enable Utterances** section. Just copy it and pate into your site's comment section.  
-&nbsp;In case of Hugo, paste it into /layout/partials/comments.html file. (make a file if it isn't existed)
+&nbsp;In case of Hugo, the location to paste the comment code is demend on theme, so check each theme's documents. (PaperMod theme - paste it into /layout/partials/comments.html file. (make a file if it isn't existed))
 
 ---
 # Done!
