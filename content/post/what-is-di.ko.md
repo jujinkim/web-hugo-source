@@ -1,7 +1,7 @@
 ---
 title: "DI(의존성 주입)란 무엇일까?"
 date: 2020-10-18T01:12:39+09:00
-draft: true
+draft: false
 ---
 &nbsp;이 글은 Dagger2를 공부하기에 앞서 DI(의존성 주입)라는게 무엇인지 도저히 모르겠는 분들을 위한(나를 위한) 글입니다.
 
@@ -33,7 +33,7 @@ draft: true
 class Noodle
 class Sauce
 class Water
-class RamenBowl {
+class RamenPot {
     fun makeRamen(water: Water, sauce: Sauce, noodle: Noodle): Ramen {
         return Ramen(water, sauce, noodle)
     }
@@ -50,9 +50,9 @@ class Chef {
         val noodle = Noodle()
         val sauce = Sauce()
         val water = Water()
-        val bowl = RamenBowl()
+        val pot = RamenPot()
 
-        val ramen = bowl.makeRamen(water, sauce, noodle)
+        val ramen = pot.makeRamen(water, sauce, noodle)
         return ramen
     }
 }
@@ -72,8 +72,8 @@ class Chef {
     fun cookRamen(water: Water, 
                   sauce: Sauce, 
                   noodle: Noodle, 
-                  bowl: RamenBowl): Ramen {
-        val ramen = bowl.makeRamen(water, sauce, noodle)
+                  pot: RamenPot): Ramen {
+        val ramen = pot.makeRamen(water, sauce, noodle)
         return ramen
     }
 }
@@ -90,7 +90,7 @@ class Market {
     fun getNoodle(): Noodle = Noodle()
     fun getSauce(): Sauce = Sauce()
     fun getWater(): Water = Water()
-    fun getRamenBowl(): RamenBowl = RamenBowl()
+    fun getRamenPot(): RamenPot = RamenPot()
 }
 ```
 &nbsp;이제 시장이 생겼으니 요리사는 라면 주문을 받으면 재료를 구해와서 조리하면 됩니다.
@@ -100,9 +100,9 @@ class Chef(val market: Market) {
         val water = market.getWater()
         val sauce = market.getSuace()
         val noodle = market.getNoodle()
-        val bowl = markget.getRamenBowl()
+        val pot = markget.getRamenPot()
 
-        val ramen = Ramen(water, sauce, noodle, bowl)
+        val ramen = Ramen(water, sauce, noodle, pot)
         return ramen
     }
 }
@@ -129,8 +129,8 @@ class NoodleMaker() {
     fun getNoodle(): Noodle = Noodle()
 }
 
-class BowlMaker() {
-    fun getRamenBowl(): RamenBowl = RamenBowl()
+class PotMaker() {
+    fun getRamenPot(): RamenPot = RamenPot()
 }
 
 // 재료를 유통하는 녀석
@@ -138,13 +138,13 @@ class Market {
     val waterMaker = WaterMaker()
     val sauceMaker = SauceMaker()
     val noodleMaker = NoodleMaker()
-    val bowlMaker = BowlMaker()
+    val potMaker = PotMaker()
 
     fun passRamenIngredients(visitorChef: Chef) {
         visitorChef.sauce = sauceMaker.getSauce()
         visitorChef.noodle = noodleMaker.getNoodle()
         visitorChef.water = waterMaker.getWater()
-        visitorChef.bowl = bowlMakger.getRamenBowl()
+        visitorChef.pot = potMakger.getRamenPot()
     }
 }
 
@@ -153,14 +153,14 @@ class Chef(val market: Market) {
     lateinit var water: Water
     lateinit var sauce: Sauce
     lateinit var noodle: Noodle
-    lateinit var bowl: RamenBowl
+    lateinit var pot: RamenPot
 
     init {
         market.passRamenIngredients(this)
     }
 
     fun cookRamen(): Ramen {
-        val ramen = bowl.makeRamen(water, sauce, noodle)
+        val ramen = pot.makeRamen(water, sauce, noodle)
         return ramen
     }
 }
@@ -199,8 +199,8 @@ class NoodleMaker(): IMaker<Noodle> {
     override fun getItem(): Noodle = Noodle()
 }
 
-class BowlMaker(): IMaker<RamenBowl> {
-    override fun getItem(): RamenBowl = RamenBowl()
+class PotMaker(): IMaker<RamenPot> {
+    override fun getItem(): RamenPot = RamenPot()
 }
 
 // 재료를 유통하는 클래스들은 공통적으로 "유통한다"라는 행동을 합니다.
@@ -212,14 +212,14 @@ class Market: IMarket {
     val waterMaker = WaterMaker()
     val sauceMaker = SauceMaker()
     val noodleMaker = NoodleMaker()
-    val bowlMaker = BowlMaker()
+    val potMaker = PotMaker()
 
     override fun passIngredients(visitor: Any) {
         if (visitor is Chef) {
             visitor.sauce = sauceMaker.getItem()
             visitor.noodle = noodleMaker.getItem()
             visitor.water = waterMaker.getItem()
-            visitor.bowl = bowlMaker.getItem()
+            visitor.pot = potMaker.getItem()
         }
     }
 }
@@ -229,7 +229,7 @@ class Chef(val market: IMarket) {
     lateinit var water: Water
     lateinit var sauce: Sauce
     lateinit var noodle: Noodle
-    lateinit var bowl: RamenBowl
+    lateinit var pot: RamenPot
 
     init {
         // Chef는 market이 Market클래스인지는 모릅니다.
@@ -238,7 +238,7 @@ class Chef(val market: IMarket) {
     }
 
     fun cookRamen(): Ramen {
-        val ramen = bowl.makeRamen(water, sauce, noodle)
+        val ramen = pot.makeRamen(water, sauce, noodle)
         return ramen
     }
 }
