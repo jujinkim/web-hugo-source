@@ -16,6 +16,10 @@ enableRobotsTXT = true
         identifier = "posts"
         name = "Posts"
         url = "/post"
+    [[menu.main]]
+        identifier = "archives"
+        name = "Archives"
+        url = "/archives"
 
 [languages]
     [languages.ko]
