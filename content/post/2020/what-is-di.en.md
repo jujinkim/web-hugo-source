@@ -1,7 +1,7 @@
 ---
 title: "What is DI(Dependency Injection)?"
 date: 2020-10-18T01:12:39+09:00
-draft: true
+draft: false
 ---
 &nbsp;This post is for those(especially me) who don't really know what DI (Dependency Injection) is before studying Dagger2.
 
