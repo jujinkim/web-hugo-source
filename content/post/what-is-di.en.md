@@ -116,7 +116,7 @@ class Chef(val market: Market) {
 &nbsp;It's still a little awekward though. Usually markets don't make products to be sold, right? Markets receive stuffs and sell them. Markets only do distributes, and there are other places that produce stuffs. Some markets also provides that 'ordering the wishlist or stuffs that ordered frequently'.   
 
 ---
-## 3rd step of DI: Divide classes that 'provide', 'distribute', 'use' ingredients.
+## 3rd step of DI: Divide classes by 'provider', 'distributer', 'user'.
 &nbsp;"Market" is a places that distributes products. Places that make products are not markets. Therefore, we need to modify `market` to receive products(ingredients) from other sources. Let's rewrite the code by dividing where to make, sell, and use.
 
 ```kotlin
@@ -180,24 +180,91 @@ class Chef(val market: Market) {
 
 ---
 ## 4th step of DI: Make 'Market' a real 'Market'
-Let `Market` inherit the market interface, and let the chef only knows the interface. This is called 
+&nbsp;Let `Market` inherit the market interface, and let the chef only knows the interface. This is called `Dependency inversion principle` or `Separation of concern` (Two concepts aren't same exactly, but they could be used for the DI). Another difficult thing came out. Separation? Dependency? In fact, I wrote the 3rd example code as intuitively as possible for easy understanding. But you know that the actual market network is much more complex. So we need to separate between markets and consumers.  
+&nbsp;"Separation" means that, literally, makes two classes don't know each other. And also means that two classes don't refer each other as well. This thing is needed because the injected class knows the injecting class to much. In the real world, consumers don't know markets well. Consumers only know services of markets.
 
+&nbsp;You'll need polymorphism as your project grows bigger. The implementation of DI is also no exception. In your real project, There will be more than four classes that provide objects(ingredients), and there will be more than one class that acts like a market. But they do similar things. Some classes do "providing", some classes go "distributing", and some classes do "using(consuming)". These common behavios must be categorized into an interface. For example, let's assume that there are two market classes which called "food market" and "electronics market". These two markets have different items definetely. However, the role(action)s are same, selling(injection). And also, provider classes such as "~~Maker" do the same behavior, provide(make). By grouping these behaviors into interfaces, the chef class doesn't need to know that how "Market" class is implemented. Just knowing an abstract market interface, and just request objects to the interface and it could be injected(got) objects that it needed.
+
+```kotlin
+// Classes that create ingredients do common action, "making(providing)".
+interface IMaker<T> {
+    fun getItem(): T
+}
+
+class WaterMaker(): IMaker<Water> {
+    override fun getItem(): Water = Water()
+}
+
+class SauceMaker(): IMaker<Sauce> {
+    override fun getItem(): Sauce = Sauce()
+}
+
+class NoodleMaker(): IMaker<Noodle> {
+    override fun getItem(): Noodle = Noodle()
+}
+
+class PotMaker(): IMaker<RamenPot> {
+    override fun getItem(): RamenPot = RamenPot()
+}
+
+// Classes that distribute ingredients do common action, "dustributing(passing)".interface IMarket {
+    fun passIngredients(visitor: Any)
+}
+
+class Market: IMarket {
+    val waterMaker = WaterMaker()
+    val sauceMaker = SauceMaker()
+    val noodleMaker = NoodleMaker()
+    val potMaker = PotMaker()
+
+    override fun passIngredients(visitor: Any) {
+        if (visitor is Chef) {
+            visitor.sauce = sauceMaker.getItem()
+            visitor.noodle = noodleMaker.getItem()
+            visitor.water = waterMaker.getItem()
+            visitor.pot = potMaker.getItem()
+        }
+    }
+}
+
+// Class that consumes ingredients
+class Chef(val market: IMarket) {
+    lateinit var water: Water
+    lateinit var sauce: Sauce
+    lateinit var noodle: Noodle
+    lateinit var pot: RamenPot
+
+    init {
+        // Chef doesn't know 'market' is a class "Market'
+        // But only knows that is is an IMarket interface.
+        market.passIngredients(this)
+    }
+
+    fun cookRamen(): Ramen {
+        val ramen = pot.makeRamen(water, sauce, noodle)
+        return ramen
+    }
+}
+```
+
+&nbsp;Awesome, isn't it? This is DI. You may noticed that DI is not for only some specific languages, but for an architecture of codes.  
+&nbsp;What if this project grows up without using DI? There will be more typs of chef and ingredients. Then, every time we need to modify ingredients, we have to modify all of chefs. It will become annoying lataer on if we manage many ingredient classes and their's constructors. Y'all guys may know that maintenance is harder than developing new features.
 
 ---
 ## What is IoC(Inversion of Control)?
- 많은 DI 글들을 보면 꼭 빠지지 않는 개념으로 IoC(제어의 역전)이 있습니다. 글 마지막 부분에 이 개념을 쓴 이유는, 어차피 아무것도 모른 상태로 “제어를 역전한다” 이런 말 써봐야 저부터가 이해가 안되기 때문입니다.
+&nbsp;In the most of DI articles, there is a concept which called "IoC(Inversion of control). I wrote down this concept at the end of the post, because you(and I) wouldn't understand "inverse something controlled blahblah" before we know about above things.
 
- 위 예제의 마지막에서는 이미 제어가 역전된 듯한 모습을 보여주긴 합니다. 요리사(소비자)가 직접 필요한 객체를 초기화하지 않았습니다. 그저 요리사는 추상화된 마켓에 “객체를 달라"고 호출만 했고, 마켓에서는 요청받은 객체를 알아서 만들어서 주입해줬죠. 즉, 요리사가 필요한 객체를 제어하는 입장에서, 제어된 객체를 받는 입장이 되어버린것이지요. 요리사는 객체가 어떻게 만들어진건지, 이 객체가 유일한지 싱글톤인지도 모릅니다. 그저 받아서 쓰기만 하면 될 뿐입니다.
+&nbsp;At the last code, it shows that the control has been inversed. The chef(consumer) didn't initialize required objects itself. The chef simply called the abstraced market to "give me ingredients(objects)", and the market passed(injected) requested objects. The chef doesn't know how objects were created, whether these objects are unique or a singleton or not. All the consumer class needs is that just get objects and use them.
 
- 사실 제어의 역전 개념은 이런 예제정도로는 완전히 설명하기 어렵습니다. 용어부터가 복잡하잖아요. 그리고 제어의 역전은 추상화가 들어가야합니다. 하위 클래스가 스스로 사용하려는 객체를 구체적으로 몰라도 되어야하기 때문입니다.
-
+&nbsp;Actually, the concept of IoC is difficult to fully explain with these tiny examples. Let's learn and get to know about it together.
 
 ---
 ## Conclusion
 - DI: In some class, request and get instances that being used even don't know how instances are generated.
-- IoC: Write codes that could be called from something. The other class controls the codes which should be controlled from the caller originally.
+- IoC: Write codes that could be called from something. The other class controls the codes(object) which should be controlled from the caller class.
+- Why we use this?: Let's think that Di will gives an industrial revolution to your code.
 
- 산업혁명 발전 과정 중에는 “소품종 대량생산"이 있습니다. 이것은 각자 해야 할 일을 잘 분배해야합니다. 혼자 다 하려고 하면 이도저도 아닌 결과물들만 나옵니다. 그리고 우리는 위 예제의 진행을 통해 산업혁명 이후의 발전된 유통망 사회를 작게나마 구성했습니다.
- 하지만 위 귀찮은 것도 맞습니다. 이거 만들려면 DI 코드들 다 만들어야하니까요. 그래서 Dagger2같은 프레임워크를 쓰는 것입니다. 거기엔 IMarket같은게 다 만들어져 있거든요. Dagger2에 관해서는 다음 글에서 확인해보겠습니다.
+&nbsp;In the process of the industrial revolution, there is "high-volume, low-variety production". It is neccessary to distribute works by each persons well. If somebody tries to do all things, it would be ruined. We have progressed the developed society after industrial revolution through the exmaple code above.  
+&nbsp;I know it is not easy to do these all things. To make this architecture, we have to make all the DI boilerplate codes. That's why we use frameworks like Dagger2. There are already implemented codes something like IMarket in Dagger2. We'll check out Dagger2 in the next post.
 
- 이 글에서는 제가 나름대로 이해한 DI를 적었습니다. 많은 분들이 이 글을 보고 좋는 느낌을 얻어가셨으면 좋겠습니다. DI는 확실히 손이 많이 가는 설계이지만, 알아두면 많은 부분에서 새로운 영감을 얻으실 것입니다.
+&nbsp;In this post, I wrote the DI that I understood in my own way. I hope may you will get a good feeling about DI after reading this post. DI is certainly a unfamiliar design for the person who faces this first time, but it will gives you a new inspiration in your codes.
