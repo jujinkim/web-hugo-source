@@ -1,7 +1,7 @@
 ---
 title: "Difference between Framework and Library"
 date: 2020-10-26T00:50:14+09:00
-draft: true
+draft: false
 ---
 
 
@@ -14,17 +14,17 @@ draft: true
 
 Dagger2, .Net Framework, express.js, Spring, react, vue.js, etc.
 
-호출 방향: `Framework` &#8594; `Project codes`
+Call direction: `Framework` &#8594; `Project codes`
 
 ---
 
 ## Library
-&nbsp;`라이브러리`는 개발자가 필요에 의해 호출하는 도구입니다. 한국어로는 `도서관`입니다. 공부, 연구, 작업 등을 하다가 필요한 문서나 자료가 필요할 경우 책을 가져다가 참고하듯, 필요할 때 꺼내어 사용한다고 생각하면 됩니다.
+&nbsp;`Library` is a tool that called by developers when they need it. In a real library, you can refer any books while you are studying, researching, or working on something. Like a real library, you can call and use features from the library whan you need.
 
-&nbsp;`라이브러리`를 호출한다고 해서 프로젝트 코드의 전반적인 설계나 스타일이 바뀌지는 않습니다. 그저 프로젝트에서 어떤 기능을 구현하기 위해 사용되는 다른 코드일 뿐입니다.
+&nbsp;It doesn't need to modify whole project's structure, architecture or style while libraries are used. They are just other codes(groups of features or methods) to implement some features in the project.
 
-&nbsp;`라이브러리`는 필요에 따라 다른 것으로 대체할 수 있습니다. 프로젝트에서 필요한 기능에 더욱 부합하는 라이브러리가 나온다면 얼마든지 대체가 가능하며, 해당 기능 또는 모듈에서의 라이브러리 호출&적용 코드만 수정해주면 보통은 문제가 없습니다.
+&nbsp;`Library` can be replaced anytime if it needed. If new libraries which are more fit to the project, then libraries can be replaced easily. It is not a big deal that replacing libraries. Just replacing some codes that calling or applying the library codes from some modules or methods is all things to replace a library.
 
 Retrofit, Volley, Glide, etc.
 
-호출 방향: `Library` &#8592; `Project codes`
+Call direction: `Library` &#8592; `Project codes`
