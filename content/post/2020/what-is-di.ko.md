@@ -132,7 +132,8 @@ class NoodleMaker() {
 class PotMaker() {
     fun getRamenPot(): RamenPot = RamenPot()
 }
-
+```
+```kotlin
 // 재료를 유통하는 녀석
 class Market {
     val waterMaker = WaterMaker()
@@ -147,7 +148,8 @@ class Market {
         visitorChef.pot = potMakger.getRamenPot()
     }
 }
-
+```
+```kotlin
 // 재료를 쓰는 녀석
 class Chef(val market: Market) {
     lateinit var water: Water
@@ -202,7 +204,8 @@ class NoodleMaker(): IMaker<Noodle> {
 class PotMaker(): IMaker<RamenPot> {
     override fun getItem(): RamenPot = RamenPot()
 }
-
+```
+```kotlin
 // 재료를 유통하는 클래스들은 공통적으로 "유통한다"라는 행동을 합니다.
 interface IMarket {
     fun passIngredients(visitor: Any)
@@ -223,7 +226,8 @@ class Market: IMarket {
         }
     }
 }
-
+```
+```kotlin
 // 재료를 쓰는 녀석
 class Chef(val market: IMarket) {
     lateinit var water: Water

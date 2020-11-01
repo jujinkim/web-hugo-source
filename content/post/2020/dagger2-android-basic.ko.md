@@ -17,7 +17,111 @@ draft: true
 &nbsp;Dagger2는 코틀린에서도 사용이 가능합니다. 다만, 코들린에는 `Koin`이라는 다른 DI 프레임워크도 있고 많은 사람들이 Koin이 더 사용하기 쉽다고 하니, 코틀린으로 개발하시는 분들은 Koin도 같이 공부해보세요.
 
 ---
+## 이전의 요리사 코드에 Dagger2를 적용하기
+이전의 DI 글에서 다루었던 요리사 코드를 Dagger2 프로젝트로 바꿔보겠습니다.
 
-## Dagger2를 Android 프로젝트에 적용하기
-&nbsp;우선 Dagger2도 외부 프레임워크이기 때문에 안드로이드 프로젝트에 적용하려면 의존성을 추가해줘야합니다.
+우선, 아래와 같이 코드를 나누겠습니다.
 
+```kotlin
+/// 
+```
+
+```kotlin
+// 재료를 만드는 클래스들
+
+// IMaker.kt
+interface IMaker<T> {
+    fun getItem(): T
+}
+
+// WaterMaker.kt
+class WaterMaker(): IMaker<Water> {
+    override fun getItem(): Water = Water()
+}
+
+// SauceMaker.kt
+class SauceMaker(): IMaker<Sauce> {
+    override fun getItem(): Sauce = Sauce()
+}
+
+// NoodleMaker.kt
+class NoodleMaker(): IMaker<Noodle> {
+    override fun getItem(): Noodle = Noodle()
+}
+
+// PotMaker.kt
+class PotMaker(): IMaker<RamenPot> {
+    override fun getItem(): RamenPot = RamenPot()
+}
+```
+```kotlin
+// 재료를 유통하는 클래스
+
+// IMarket.kt
+interface IMarket {
+    fun passIngredients(visitor: Any)
+}
+
+// Market.kt
+class Market: IMarket {
+    val waterMaker = WaterMaker()
+    val sauceMaker = SauceMaker()
+    val noodleMaker = NoodleMaker()
+    val potMaker = PotMaker()
+
+    override fun passIngredients(visitor: Any) {
+        if (visitor is Chef) {
+            visitor.sauce = sauceMaker.getItem()
+            visitor.noodle = noodleMaker.getItem()
+            visitor.water = waterMaker.getItem()
+            visitor.pot = potMaker.getItem()
+        }
+    }
+}
+```
+```kotlin
+// 재료를 쓰는 클래스
+
+// Chef.kt
+class Chef(val market: IMarket) {
+    lateinit var water: Water
+    lateinit var sauce: Sauce
+    lateinit var noodle: Noodle
+    lateinit var pot: RamenPot
+
+    init {
+        market.passIngredients(this)
+    }
+
+    fun cookRamen(): Ramen {
+        val ramen = pot.makeRamen(water, sauce, noodle)
+        return ramen
+    }
+}
+```
+---
+### Dagger2를 Android 프로젝트에 적용하기
+&nbsp;Dagger2도 외부 프레임워크이기 때문에 안드로이드 프로젝트에 적용하려면 의존성을 추가해줘야합니다.
+
+build.gradle
+```gradle
+dependencies {
+    ...
+
+    implementation 'com.google.dagger:dagger:2.15'
+    implementation 'com.google.dagger:dagger-android:2.15'
+    implementation 'com.google.dagger:dagger-android-support:2.15'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.15'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.15'
+}
+```
+이 글 작성 당시 최신 버전은 `2.15` 입니다.
+
+
+### 공급자(모듈) 만들기
+
+### 유통자(컴포넌트) 만들기
+
+### 사용자 만들기
+
+---

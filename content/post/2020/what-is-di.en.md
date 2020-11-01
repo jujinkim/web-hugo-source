@@ -32,7 +32,7 @@ First, let's define ingredients.
 class Noodle
 class Sauce
 class Water
-class RamenBowl {
+class RamenPot {
     fun makeRamen(water: Water, sauce: Sauce, noodle: Noodle): Ramen {
         return Ramen(water, sauce, noodle)
     }
@@ -136,7 +136,8 @@ class NoodleMaker() {
 class PotMaker() {
     fun getRamenPot(): RamenPot = RamenPot()
 }
-
+```
+```kotlin
 // Classes that distributes stuffs
 class Market {
     val waterMaker = WaterMaker()
@@ -151,7 +152,8 @@ class Market {
         visitorChef.pot = potMakger.getRamenPot()
     }
 }
-
+```
+```kotlin
 // Class that uses stuffs
 class Chef(val market: Market) {
     lateinit var water: Water
@@ -206,8 +208,10 @@ class NoodleMaker(): IMaker<Noodle> {
 class PotMaker(): IMaker<RamenPot> {
     override fun getItem(): RamenPot = RamenPot()
 }
-
-// Classes that distribute ingredients do common action, "dustributing(passing)".interface IMarket {
+```
+```kotlin
+// Classes that distribute ingredients do common action, "dustributing(passing)".
+interface IMarket {
     fun passIngredients(visitor: Any)
 }
 
@@ -226,7 +230,8 @@ class Market: IMarket {
         }
     }
 }
-
+```
+```kotlin
 // Class that consumes ingredients
 class Chef(val market: IMarket) {
     lateinit var water: Water
