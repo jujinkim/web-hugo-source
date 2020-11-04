@@ -9,17 +9,30 @@ enableRobotsTXT = true
 
 [menu]
     [[menu.main]]
+        identifier = "ko"
+        name = "한국어"
+        url = "../ko/"
+        weight = 1
+    [[menu.main]]
+        identifier = "en"
+        name = "English"
+        url = "../"
+        weight = 2
+    [[menu.main]]
         identifier = "about"
         name = "About me"
         url = "../me"
+        weight = 3
     [[menu.main]]
         identifier = "posts"
         name = "Posts"
-        url = "/post"
+        url = "/post/"
+        weight = 4
     [[menu.main]]
         identifier = "archives"
         name = "Archives"
-        url = "/archives"
+        url = "/archives/"
+        weight = 5
 
 [languages]
     [languages.ko]
